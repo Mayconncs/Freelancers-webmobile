@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %}Editar Perfil - Freelancers Locais{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-lg border-0 animate__animated animate__fadeIn">
+            <div class="card-body p-4">
+                <h2 class="mb-4">Editar Perfil</h2>
+                <form method="post" enctype="multipart/form-data" id="perfilForm">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_nome" class="form-label">Nome</label>
+                            {{ form.nome }}
+                            <div class="invalid-feedback">Por favor, insira seu nome.</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_papel" class="form-label">Papel</label>
+                            {{ form.papel }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_localizacao" class="form-label">Localização</label>
+                        {{ form.localizacao }}
+                        <div class="invalid-feedback">Por favor, insira uma localização válida.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_habilidades" class="form-label">Habilidades</label>
+                        {{ form.habilidades }}
+                        <small class="form-text text-muted">Segure Ctrl (ou Cmd) para selecionar múltiplas habilidades.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_bio" class="form-label">Bio</label>
+                        {{ form.bio }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_foto" class="form-label">Foto de Perfil</label>
+                        {{ form.foto }}
+                        {% if form.instance.foto %}
+                        <div class="mt-2">
+                            <img src="{% url 'foto-perfil' arquivo=form.instance.foto.name|cut:'freelancer/fotos/' %}" alt="Foto atual" class="img-thumbnail" style="max-width: 150px;">
+                            <small class="form-text text-muted">Foto atual. Selecione um novo arquivo para substituir.</small>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <a href="{% url 'listar-freelancers' %}" class="btn btn-outline-secondary me-2">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block css_local %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+.card { border-radius: 15px; }
+.form-control:focus, .form-select:focus { border-color: #007bff; box-shadow: 0 0 5px rgba(0,123,255,0.5); }
+.select2-container--default .select2-selection--multiple { border-radius: 8px; border: 1px solid #ced4da; }
+</style>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar Select2 para habilidades
+    $('#id_habilidades').select2({
+        placeholder: "Selecione as habilidades",
+        allowClear: true
+    });
+
+    // Validação do formulário
+    const form = document.getElementById('perfilForm');
+    form.addEventListener('submit', function(e) {
+        const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+        let valid = true;
+        inputs.forEach(input => {
+            if (!input.value) {
+                valid = false;
+                input.classList.add('is-invalid');
+            } else {
+                input.classList.remove('is-invalid');
+            }
+        });
+        if (!valid) {
+            e.preventDefault();
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-danger alert-dismissible fade show mt-3';
+            alert.innerHTML = 'Por favor, preencha todos os campos obrigatórios.<button type="button" class="btn-close" data-bs-dismiss="alert"></button>';
+            form.prepend(alert);
+            setTimeout(() => alert.remove(), 3000);
+        }
+    });
+});
+</script>
+{% endblock %}

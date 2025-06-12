@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Criar Perfil - Freelancers Locais{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-lg border-0 animate__animated animate__fadeIn">
+            <div class="card-body p-4">
+                <h2 class="mb-4">Criar Perfil</h2>
+                <form method="post" enctype="multipart/form-data" id="perfilForm">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_nome" class="form-label">Nome</label>
+                            {{ form.nome }}
+                            <div class="invalid-feedback">Por favor, insira seu nome.</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_papel" class="form-label">Papel</label>
+                            {{ form.papel }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_localizacao" class="form-label">Localização</label>
+                        {{ form.localizacao }}
+                        <div class="invalid-feedback">Por favor, insira uma localização válida.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_habilidades" class="form-label">Habilidades</label>
+                        {{ form.habilidades }}
+                        <small class="form-text text-muted">Segure Ctrl (ou Cmd) para selecionar múltiplas habilidades.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_bio" class="form-label">Bio</label>
+                        {{ form.bio }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_foto" class="form-label">Foto de Perfil</label>
+                        {{ form.foto }}
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <a href="{% url 'listar-freelancers' %}" class="btn btn-outline-secondary me-2">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block css_local %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<style>
+.card { border-radius: 15px; }
+.form-control:focus, .form-select:focus { border-color: #007bff; box-shadow: 0 0 5px rgba(0,123,255,0.5); }
+</style>
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById('perfilForm').addEventListener('submit', function(e) {
+    const inputs = this.querySelectorAll('input[required], select[required], textarea[required]');
+    let valid = true;
+    inputs.forEach(input => {
+        if (!input.value) {
+            valid = false;
+            input.classList.add('is-invalid');
+        } else {
+            input.classList.remove('is-invalid');
+        }
+    });
+    if (!valid) e.preventDefault();
+});
+</script>
+{% endblock %}
