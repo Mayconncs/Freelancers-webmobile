@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Projetos - Freelancers Locais{% endblock %}
+{% block content %}
+<div class="mb-4">
+    <h2 class="d-inline">Projetos</h2>
+    <a href="{% url 'criar-projeto' %}" class="btn btn-success float-end"><i class="fas fa-plus"></i> Criar Projeto</a>
+</div>
+<div class="input-group mb-3">
+    <span class="input-group-text"><i class="fas fa-search"></i></span>
+    <input type="text" class="form-control" id="searchInput" placeholder="Pesquisar por título, localização ou habilidade">
+</div>
+<div class="row" id="projetoList">
+    {% for projeto in projetos %}
+    <div class="col-md-6 col-lg-4 mb-4 projeto-card animate__animated animate__fadeInUp">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">{{ projeto.titulo }}</h5>
+                <p class="card-text">{{ projeto.descricao|truncatewords:20 }}</p>
+                <p class="card-text"><strong>Localização:</strong> {{ projeto.localizacao }}</p>
+                <p class="card-text"><strong>Habilidades:</strong>
+                    {% for habilidade in projeto.habilidades_requeridas %}
+                    <span class="badge bg-primary me-1">{{ habilidade }}</span>
+                    {% endfor %}
+                </p>
+                <p class="card-text"><strong>Status:</strong> <span class="badge bg-{% if projeto.status == 1 %}warning{% elif projeto.status == 2 %}info{% else %}success{% endif %}">{{ projeto.get_status_display }}</span></p>
+                <div class="d-flex justify-content-between flex-wrap">
+                    <a href="{% url 'editar-projeto' pk=projeto.pk %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-edit"></i> Editar</a>
+                    <a href="{% url 'deletar-projeto' pk=projeto.pk %}" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i> Deletar</a>
+                    <a href="{% url 'criar-proposta' projeto_id=projeto.pk %}" class="btn btn-outline-info btn-sm"><i class="fas fa-handshake"></i> Proposta</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="alert alert-info">Nenhum projeto encontrado.</div>
+    {% endfor %}
+</div>
+{% endblock %}
+{% block css_local %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<style>
+.card { border-radius: 10px; transition: transform 0.2s ease; }
+.card:hover { transform: translateY(-5px); }
+.badge { font-size: 0.9rem; }
+</style>
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById('searchInput').addEventListener('input', function() {
+    const filter = this.value.toLowerCase();
+    const cards = document.querySelectorAll('.projeto-card');
+    cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(filter) ? '' : 'none';
+    });
+});
+</script>
+{% endblock %}
