@@ -1,0 +1,5 @@
+OPCOES_STATUS_PROPOSTA = (
+    (1, 'PENDENTE'),
+    (2, 'ACEITA'),
+    (3, 'REJEITADA'),
+)

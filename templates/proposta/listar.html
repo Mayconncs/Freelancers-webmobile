@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Propostas - Freelancers Locais{% endblock %}
+{% block content %}
+<div class="mb-4">
+    <h2>Propostas</h2>
+</div>
+<div class="row" id="propostaList">
+    {% for proposta in propostas %}
+    <div class="col-md-6 col-lg-4 mb-4 proposta-card animate__animated animate__fadeInUp">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">{{ proposta.projeto.titulo }}</h5>
+                <p class="card-text"><strong>Freelancer:</strong> {{ proposta.freelancer.nome }}</p>
+                <p class="card-text"><strong>Preço:</strong> R$ {{ proposta.preco }}</p>
+                <p class="card-text"><strong>Tempo Estimado:</strong> {{ proposta.tempo_estimado }}</p>
+                <p class="card-text"><strong>Mensagem:</strong> {{ proposta.mensagem|truncatewords:20 }}</p>
+                <p class="card-text"><strong>Status:</strong> <span class="badge bg-{% if proposta.status == 1 %}warning{% elif proposta.status == 2 %}success{% else %}danger{% endif %}">{{ proposta.get_status_display }}</span></p>
+                {% if proposta.status == 1 and user.perfil.papel == 2 %}
+                <form method="post" action="{% url 'aceitar-proposta' pk=proposta.pk %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-check"></i> Aceitar</button>
+                </form>
+                {% endif %}
+                {% if proposta.status == 2 %}
+                <a href="https://wa.me/?text=Olá, sobre o projeto {{ proposta.projeto.titulo }}" target="_blank" class="btn btn-outline-primary btn-sm"><i class="fab fa-whatsapp"></i> Contatar via WhatsApp</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="alert alert-info">Nenhuma proposta encontrada.</div>
+    {% endfor %}
+</div>
+{% endblock %}
+{% block css_local %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<style>
+.card { border-radius: 10px; transition: transform 0.2s ease; }
+.card:hover { transform: translateY(-5px); }
+.badge { font-size: 0.9rem; }
+</style>
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById('propostaList').addEventListener('click', function(e) {
+    if (e.target.classList.contains('btn-success')) {
+        e.target.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+    }
+});
+</script>
+{% endblock %}
