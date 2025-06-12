@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Login - Freelancers Locais{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow-lg border-0 animate__animated animate__fadeIn">
+            <div class="card-body p-4">
+                <h2 class="text-center mb-4">Login</h2>
+                <form method="post" id="loginForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="usuario" class="form-label">Usuário</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" class="form-control" id="usuario" name="usuario" required placeholder="Digite seu usuário">
+                            <div class="invalid-feedback">Por favor, insira um usuário válido.</div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="senha" class="form-label">Senha</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control" id="senha" name="senha" required placeholder="Digite sua senha">
+                            <div class="invalid-feedback">Por favor, insira sua senha.</div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                </form>
+                <p class="text-center mt-3">
+                    Não tem conta? <a href="{% url 'criar-perfil' %}">Cadastre-se</a>
+                </p>
+                <p class="text-center">
+                    <a href="#">Esqueceu sua senha?</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block css_local %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<style>
+    .card { 
+        border-radius: 15px;
+    }
+    .btn-primary {
+        transition: background-color 0.3s ease;
+    }
+</style>
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    const inputs = this.querySelectorAll('input[required]');
+    let valid = true;
+    inputs.forEach(input => {
+        if (!input.value) {
+            valid = false;
+            input.classList.add('is-invalid');
+        } else {
+            input.classList.remove('is-invalid');
+        }
+    });
+    if (!valid) e.preventDefault();
+});
+</script>
+{% endblock %}

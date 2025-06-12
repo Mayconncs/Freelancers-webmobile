@@ -1,0 +1,8 @@
+django
+djangorestframework
+django-rest-auth
+Pillow
+psycopg2-binary
+django-environ
+python-dotenv
+django-cors-headers
