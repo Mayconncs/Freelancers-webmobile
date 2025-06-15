@@ -15,15 +15,18 @@
                 <p class="card-text"><strong>Tempo Estimado:</strong> {{ proposta.tempo_estimado }}</p>
                 <p class="card-text"><strong>Mensagem:</strong> {{ proposta.mensagem|truncatewords:20 }}</p>
                 <p class="card-text"><strong>Status:</strong> <span class="badge bg-{% if proposta.status == 1 %}warning{% elif proposta.status == 2 %}success{% else %}danger{% endif %}">{{ proposta.get_status_display }}</span></p>
-                {% if proposta.status == 1 and user.perfil.papel == 2 %}
-                <form method="post" action="{% url 'aceitar-proposta' pk=proposta.pk %}" class="d-inline">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-check"></i> Aceitar</button>
-                </form>
-                {% endif %}
-                {% if proposta.status == 2 %}
-                <a href="https://wa.me/?text=Olá, sobre o projeto {{ proposta.projeto.titulo }}" target="_blank" class="btn btn-outline-primary btn-sm"><i class="fab fa-whatsapp"></i> Contatar via WhatsApp</a>
-                {% endif %}
+                <div class="d-flex justify-content-between flex-wrap gap-2">
+                    <a href="{% url 'detalhar-proposta' pk=proposta.pk %}" class="btn btn-outline-info btn-sm"><i class="fas fa-eye"></i> Ver Detalhes</a>
+                    {% if proposta.status == 1 and user.perfil.papel == 2 and proposta.projeto.cliente == user.perfil %}
+                    <form method="post" action="{% url 'aceitar-proposta' pk=proposta.pk %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-check"></i> Aceitar</button>
+                    </form>
+                    {% endif %}
+                    {% if proposta.status == 2 %}
+                    <a href="https://wa.me/?text=Olá, sobre o projeto {{ proposta.projeto.titulo }}" target="_blank" class="btn btn-outline-primary btn-sm"><i class="fab fa-whatsapp"></i> Contatar via WhatsApp</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

@@ -9,8 +9,10 @@
                 <div class="mb-3">
                     <h5>Projeto: {{ projeto.titulo }}</h5>
                     <p><strong>Habilidades Requeridas:</strong>
-                        {% for habilidade in projeto.habilidades_requeridas %}
+                        {% for habilidade in projeto.get_habilidades_display %}
                         <span class="badge bg-primary me-1">{{ habilidade }}</span>
+                        {% empty %}
+                        <span class="badge bg-secondary me-1">Nenhuma habilidade</span>
                         {% endfor %}
                     </p>
                 </div>

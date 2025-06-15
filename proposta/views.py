@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView
 from rest_framework.authentication import TokenAuthentication
@@ -9,7 +9,7 @@ from proposta.forms import FormularioProposta
 from proposta.serializers import SerializadorProposta
 from projeto.models import Projeto
 from freelancer.consts import OPCOES_HABILIDADES
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 
 class CriarProposta(LoginRequiredMixin, CreateView):
@@ -23,7 +23,6 @@ class CriarProposta(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         projeto = get_object_or_404(Projeto, pk=self.kwargs['projeto_id'])
-        projeto.habilidades_requeridas = [dict(OPCOES_HABILIDADES).get(h, 'Desconhecido') for h in projeto.habilidades_requeridas]
         context['projeto'] = projeto
         return context
 
@@ -42,19 +41,24 @@ class ListarPropostas(LoginRequiredMixin, ListView):
     context_object_name = 'propostas'
     template_name = 'proposta/listar.html'
 
+class DetalharProposta(LoginRequiredMixin, DetailView):
+    model = Proposta
+    context_object_name = 'proposta'
+    template_name = 'proposta/detalhar.html'
+
 class AceitarProposta(LoginRequiredMixin, CreateView):
     model = Proposta
     fields = []
 
     def post(self, request, *args, **kwargs):
         proposta = Proposta.objects.get(pk=self.kwargs['pk'])
+        if proposta.projeto.cliente != request.user.perfil:
+            messages.error(request, 'Você não tem permissão para aceitar esta proposta.')
+            return redirect('listar-propostas')
         proposta.status = 2
         proposta.save()
         messages.success(self.request, 'Proposta aceita com sucesso!')
-        return self.get(request, *args, **kwargs)
-
-    def get_success_url(self):
-        return reverse_lazy('listar-propostas')
+        return redirect('listar-propostas')
 
 class APIListarPropostas(ListAPIView):
     serializer_class = SerializadorProposta
