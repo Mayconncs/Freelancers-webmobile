@@ -31,6 +31,15 @@
                         <a class="nav-link" href="{% url 'listar-portfolios' %}"><i class="fas fa-folder-open me-1"></i> Portfólios</a>
                     </li>
                     {% if user.is_authenticated %}
+                    {% if user.perfil %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'detalhar-perfil' pk=user.perfil.pk %}"><i class="fas fa-user me-1"></i> Meu Perfil</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'criar-perfil' %}"><i class="fas fa-user-plus me-1"></i> Criar Perfil</a>
+                    </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-1"></i> Sair</a>
                     </li>
@@ -58,7 +67,7 @@
     </div>
 
     <footer class="bg-dark text-white text-center py-3 mt-5">
-        <p>&copy; 2025 Freelancers Locais. Todos os direitos reservados.</p>
+        <p>© 2025 Freelancers Locais.</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

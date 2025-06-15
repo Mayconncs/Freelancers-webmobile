@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
-{% block title %}Login - Freelancers Locais{% endblock %}
+{% block title %}Cadastro - Freelancers Locais{% endblock %}
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6 col-lg-4">
         <div class="card shadow-lg border-0 animate__animated animate__fadeIn">
             <div class="card-body p-4">
-                <h2 class="text-center mb-4">Login</h2>
+                <h2 class="text-center mb-4">Cadastro</h2>
                 {% if mensagem %}
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div class="alert alert-{% if mensagem_erro %}danger{% else %}success{% endif %} alert-dismissible fade show" role="alert">
                     {{ mensagem }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 {% endif %}
-                <form method="post" id="loginForm">
+                <form method="post" id="cadastroForm">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="usuario" class="form-label">Usuário</label>
@@ -23,6 +23,14 @@
                         </div>
                     </div>
                     <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input type="email" class="form-control" id="email" name="email" required placeholder="Digite seu email">
+                            <div class="invalid-feedback">Por favor, insira um email válido.</div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
                         <label for="senha" class="form-label">Senha</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-lock"></i></span>
@@ -30,14 +38,19 @@
                             <div class="invalid-feedback">Por favor, insira sua senha.</div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                    <div class="mb-3">
+                        <label for="confirmar_senha" class="form-label">Confirmar Senha</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control" id="confirmar_senha" name="confirmar_senha" required placeholder="Confirme sua senha">
+                            <div class="invalid-feedback">As senhas não coincidem.</div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
                 </form>
                 <p class="text-center mt-3">
-                    Não tem conta? <a href="{% url 'cadastro' %}">Cadastre-se</a>
+                    Já tem conta? <a href="{% url 'login' %}">Faça login</a>
                 </p>
-                {% comment %} <p class="text-center">
-                    <a href="#">Esqueceu sua senha?</a>
-                </p> {% endcomment %}
             </div>
         </div>
     </div>
@@ -56,8 +69,10 @@
 {% endblock %}
 {% block scripts %}
 <script>
-document.getElementById('loginForm').addEventListener('submit', function(e) {
+document.getElementById('cadastroForm').addEventListener('submit', function(e) {
     const inputs = this.querySelectorAll('input[required]');
+    const senha = document.getElementById('senha').value;
+    const confirmarSenha = document.getElementById('confirmar_senha').value;
     let valid = true;
     inputs.forEach(input => {
         if (!input.value) {
@@ -67,6 +82,12 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
             input.classList.remove('is-invalid');
         }
     });
+    if (senha !== confirmarSenha) {
+        valid = false;
+        document.getElementById('confirmar_senha').classList.add('is-invalid');
+    } else {
+        document.getElementById('confirmar_senha').classList.remove('is-invalid');
+    }
     if (!valid) e.preventDefault();
 });
 </script>
