@@ -7,7 +7,7 @@
 </div>
 <div class="input-group mb-3">
     <span class="input-group-text"><i class="fas fa-search"></i></span>
-    <input type="text" class="form-control" id="searchInput" placeholder="Pesquisar por nome, localização ou habilidade">
+    <input type="text" class="form-control" id="searchInput" placeholder="Pesquisar por nome, cidade ou habilidade">
 </div>
 <div class="row" id="freelancerList">
     {% for freelancer in freelancers %}
@@ -22,16 +22,21 @@
             {% endif %}
             <div class="card-body">
                 <h5 class="card-title">{{ freelancer.nome }}</h5>
-                <p class="card-text"><strong>Localização:</strong> {{ freelancer.localizacao }}</p>
+                <p class="card-text"><strong>Cidade:</strong> {{ freelancer.cidade|default:"Não informado" }}, {{ freelancer.estado|default:"Não informado" }}</p>
                 <p class="card-text"><strong>Habilidades:</strong>
-                    {% for habilidade in freelancer.habilidades %}
+                    {% for habilidade in freelancer.get_habilidades_display %}
                     <span class="badge bg-primary me-1">{{ habilidade }}</span>
+                    {% empty %}
+                    <span class="badge bg-secondary me-1">Nenhuma habilidade</span>
                     {% endfor %}
                 </p>
-                <p class="card-text">{{ freelancer.bio|truncatewords:20 }}</p>
+                <p class="card-text">{{ freelancer.bio|truncatewords:20|default:"Nenhuma bio fornecida." }}</p>
                 <div class="d-flex justify-content-between">
+                    <a href="{% url 'detalhar-perfil' pk=freelancer.pk %}" class="btn btn-outline-info btn-sm"><i class="fas fa-eye"></i> Ver Detalhes</a>
+                    {% if freelancer.usuario == user %}
                     <a href="{% url 'editar-perfil' pk=freelancer.pk %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-edit"></i> Editar</a>
                     <a href="{% url 'deletar-perfil' pk=freelancer.pk %}" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i> Deletar</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

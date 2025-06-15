@@ -6,6 +6,14 @@
         <div class="card shadow-lg border-0 animate__animated animate__fadeIn">
             <div class="card-body p-4">
                 <h2 class="mb-4">Criar Perfil</h2>
+                {% if messages %}
+                <div class="alert alert-dismissible fade show" role="alert">
+                    {% for message in messages %}
+                    <div class="alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
                 <form method="post" enctype="multipart/form-data" id="perfilForm">
                     {% csrf_token %}
                     <div class="row">
@@ -19,15 +27,43 @@
                             {{ form.papel }}
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="id_estado" class="form-label">Estado</label>
+                            {{ form.estado }}
+                            <div class="invalid-feedback">Por favor, insira o estado.</div>
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <label for="id_cidade" class="form-label">Cidade</label>
+                            {{ form.cidade }}
+                            <div class="invalid-feedback">Por favor, insira a cidade.</div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="id_cep" class="form-label">CEP</label>
+                            {{ form.cep }}
+                            <div class="invalid-feedback">Por favor, insira um CEP válido.</div>
+                        </div>
+                    </div>
                     <div class="mb-3">
-                        <label for="id_localizacao" class="form-label">Localização</label>
-                        {{ form.localizacao }}
-                        <div class="invalid-feedback">Por favor, insira uma localização válida.</div>
+                        <label for="id_lote" class="form-label">Lote</label>
+                        {{ form.lote }}
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_telefone" class="form-label">Telefone</label>
+                            {{ form.telefone }}
+                            <div class="invalid-feedback">Por favor, insira um telefone válido.</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_email_contato" class="form-label">Email de Contato</label>
+                            {{ form.email_contato }}
+                            <div class="invalid-feedback">Por favor, insira um email válido.</div>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="id_habilidades" class="form-label">Habilidades</label>
                         {{ form.habilidades }}
-                        <small class="form-text text-muted">Segure Ctrl (ou Cmd) para selecionar múltiplas habilidades.</small>
+                        <small class="form-text text-muted">Selecione uma ou mais habilidades.</small>
                     </div>
                     <div class="mb-3">
                         <label for="id_bio" class="form-label">Bio</label>
@@ -49,25 +85,42 @@
 {% endblock %}
 {% block css_local %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
 .card { border-radius: 15px; }
 .form-control:focus, .form-select:focus { border-color: #007bff; box-shadow: 0 0 5px rgba(0,123,255,0.5); }
+.select2-container--default .select2-selection--multiple { border-radius: 8px; border: 1px solid #ced4da; }
+.alert { margin-bottom: 1rem; }
 </style>
 {% endblock %}
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-document.getElementById('perfilForm').addEventListener('submit', function(e) {
-    const inputs = this.querySelectorAll('input[required], select[required], textarea[required]');
-    let valid = true;
-    inputs.forEach(input => {
-        if (!input.value) {
-            valid = false;
-            input.classList.add('is-invalid');
-        } else {
-            input.classList.remove('is-invalid');
+document.addEventListener('DOMContentLoaded', function() {
+    $('#id_habilidades').select2({
+        placeholder: "Selecione as habilidades",
+        allowClear: true
+    });
+    document.getElementById('perfilForm').addEventListener('submit', function(e) {
+        const inputs = this.querySelectorAll('input[required], select[required], textarea[required]');
+        let valid = true;
+        inputs.forEach(input => {
+            if (!input.value) {
+                valid = false;
+                input.classList.add('is-invalid');
+            } else {
+                input.classList.remove('is-invalid');
+            }
+        });
+        if (!valid) {
+            e.preventDefault();
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-danger alert-dismissible fade show mt-3';
+            alert.innerHTML = 'Por favor, preencha todos os campos obrigatórios.<button type="button" class="btn-close" data-bs-dismiss="alert"></button>';
+            this.prepend(alert);
+            setTimeout(() => alert.remove(), 3000);
         }
     });
-    if (!valid) e.preventDefault();
 });
 </script>
 {% endblock %}

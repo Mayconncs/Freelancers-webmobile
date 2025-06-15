@@ -19,15 +19,43 @@
                             {{ form.papel }}
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="id_estado" class="form-label">Estado</label>
+                            {{ form.estado }}
+                            <div class="invalid-feedback">Por favor, insira o estado.</div>
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <label for="id_cidade" class="form-label">Cidade</label>
+                            {{ form.cidade }}
+                            <div class="invalid-feedback">Por favor, insira a cidade.</div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="id_cep" class="form-label">CEP</label>
+                            {{ form.cep }}
+                            <div class="invalid-feedback">Por favor, insira um CEP válido.</div>
+                        </div>
+                    </div>
                     <div class="mb-3">
-                        <label for="id_localizacao" class="form-label">Localização</label>
-                        {{ form.localizacao }}
-                        <div class="invalid-feedback">Por favor, insira uma localização válida.</div>
+                        <label for="id_lote" class="form-label">Lote</label>
+                        {{ form.lote }}
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_telefone" class="form-label">Telefone</label>
+                            {{ form.telefone }}
+                            <div class="invalid-feedback">Por favor, insira um telefone válido.</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="id_email_contato" class="form-label">Email de Contato</label>
+                            {{ form.email_contato }}
+                            <div class="invalid-feedback">Por favor, insira um email válido.</div>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="id_habilidades" class="form-label">Habilidades</label>
                         {{ form.habilidades }}
-                        <small class="form-text text-muted">Segure Ctrl (ou Cmd) para selecionar múltiplas habilidades.</small>
+                        <small class="form-text text-muted">Selecione uma ou mais habilidades.</small>
                     </div>
                     <div class="mb-3">
                         <label for="id_bio" class="form-label">Bio</label>
@@ -66,16 +94,12 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar Select2 para habilidades
     $('#id_habilidades').select2({
         placeholder: "Selecione as habilidades",
         allowClear: true
     });
-
-    // Validação do formulário
-    const form = document.getElementById('perfilForm');
-    form.addEventListener('submit', function(e) {
-        const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+    document.getElementById('perfilForm').addEventListener('submit', function(e) {
+        const inputs = this.querySelectorAll('input[required], select[required], textarea[required]');
         let valid = true;
         inputs.forEach(input => {
             if (!input.value) {
@@ -90,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const alert = document.createElement('div');
             alert.className = 'alert alert-danger alert-dismissible fade show mt-3';
             alert.innerHTML = 'Por favor, preencha todos os campos obrigatórios.<button type="button" class="btn-close" data-bs-dismiss="alert"></button>';
-            form.prepend(alert);
+            this.prepend(alert);
             setTimeout(() => alert.remove(), 3000);
         }
     });

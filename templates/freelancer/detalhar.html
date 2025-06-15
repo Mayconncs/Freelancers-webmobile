@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Detalhes do Perfil - {{ freelancer.nome }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow-lg border-0 animate__animated animate__fadeIn">
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        {% if freelancer.foto %}
+                        <img src="{% url 'foto-perfil' arquivo=freelancer.foto.name|cut:'freelancer/fotos/' %}" alt="{{ freelancer.nome }}" class="img-fluid rounded-circle mb-3" style="max-width: 200px;">
+                        {% else %}
+                        <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded-circle mb-3" style="width: 200px; height: 200px;">
+                            <i class="fas fa-user fa-4x"></i>
+                        </div>
+                        {% endif %}
+                        <h3>{{ freelancer.nome }}</h3>
+                        <p class="text-muted">{{ freelancer.get_papel_display }}</p>
+                    </div>
+                    <div class="col-md-8">
+                        <h4>Informações de Contato</h4>
+                        <p><strong>Email:</strong> {{ freelancer.email_contato|default:"Não informado" }}</p>
+                        <p><strong>Telefone:</strong> {{ freelancer.telefone|default:"Não informado" }}</p>
+                        <h4>Endereço</h4>
+                        <p><strong>Estado:</strong> {{ freelancer.estado }}</p>
+                        <p><strong>Cidade:</strong> {{ freelancer.cidade }}</p>
+                        <p><strong>CEP:</strong> {{ freelancer.cep }}</p>
+                        <p><strong>Lote:</strong> {{ freelancer.lote|default:"Não informado" }}</p>
+                        <h4>Habilidades</h4>
+                        <p>
+                            {% for habilidade in freelancer.get_habilidades_display %}
+                            <span class="badge bg-primary me-1">{{ habilidade }}</span>
+                            {% endfor %}
+                        </p>
+                        <h4>Bio</h4>
+                        <p>{{ freelancer.bio|default:"Nenhuma bio fornecida." }}</p>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end mt-4">
+                    <a href="{% url 'listar-freelancers' %}" class="btn btn-outline-secondary">Voltar</a>
+                    {% if freelancer.usuario == user %}
+                    <a href="{% url 'editar-perfil' pk=freelancer.pk %}" class="btn btn-primary ms-2"><i class="fas fa-edit"></i> Editar Perfil</a>
+                    <a href="{% url 'deletar-perfil' pk=freelancer.pk %}" class="btn btn-danger ms-2"><i class="fas fa-trash"></i> Deletar Perfil</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block css_local %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<style>
+.card { border-radius: 15px; }
+.badge { font-size: 0.9rem; }
+.img-fluid.rounded-circle { border: 3px solid #007bff; }
+</style>
+{% endblock %}

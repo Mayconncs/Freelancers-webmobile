@@ -8,7 +8,8 @@ class SerializadorPerfil(serializers.ModelSerializer):
 
     class Meta:
         model = Perfil
-        exclude = []
+        fields = ['id', 'usuario', 'nome', 'papel', 'nome_papel', 'estado', 'cidade', 'cep', 'lote', 
+                  'telefone', 'email_contato', 'habilidades', 'nome_habilidades', 'bio', 'foto']
 
     def get_nome_papel(self, instancia):
         return instancia.get_papel_display()
