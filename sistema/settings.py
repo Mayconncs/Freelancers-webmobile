@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'freelancer.apps.FreelancerConfig',
     'projeto.apps.ProjetoConfig',
     'proposta.apps.PropostaConfig',
-    'portfolio.apps.PortfolioConfig',
 ]
 
 MIDDLEWARE = [

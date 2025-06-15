@@ -10,6 +10,5 @@ urlpatterns = [
     path('freelancer/', include('freelancer.urls'), name='freelancer'),
     path('projeto/', include('projeto.urls'), name='projeto'),
     path('proposta/', include('proposta.urls'), name='proposta'),
-    path('portfolio/', include('portfolio.urls'), name='portfolio'),
     path('autenticacao-api/', LoginAPI.as_view(), name='login-api'),
 ]

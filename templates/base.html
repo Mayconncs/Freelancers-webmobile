@@ -27,9 +27,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'listar-projetos' %}"><i class="fas fa-project-diagram me-1"></i> Projetos</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'listar-portfolios' %}"><i class="fas fa-folder-open me-1"></i> Portfólios</a>
-                    </li>
                     {% if user.is_authenticated %}
                     {% if user.perfil %}
                     <li class="nav-item">
