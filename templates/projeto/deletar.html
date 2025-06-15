@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Deletar Projeto - Freelancers Locais{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-lg border-0 animate__animated animate__fadeIn">
+            <div class="card-body p-4">
+                <h2 class="mb-4">Deletar Projeto</h2>
+                {% if messages %}
+                <div class="alert alert-dismissible fade show" role="alert">
+                    {% for message in messages %}
+                    <div class="alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+                <p class="alert alert-warning">Você tem certeza que deseja deletar o projeto <strong>{{ object.titulo }}</strong>? Esta ação não pode ser desfeita.</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-end">
+                        <a href="{% url 'listar-projetos' %}" class="btn btn-outline-secondary me-2">Cancelar</a>
+                        <button type="submit" class="btn btn-danger">Confirmar Deleção</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block css_local %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<style>
+.card { border-radius: 15px; }
+.alert { margin-bottom: 1rem; }
+</style>
+{% endblock %}

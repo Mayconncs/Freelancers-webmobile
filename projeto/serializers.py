@@ -7,7 +7,8 @@ class SerializadorProjeto(serializers.ModelSerializer):
 
     class Meta:
         model = Projeto
-        exclude = []
+        fields = ['id', 'cliente', 'titulo', 'descricao', 'habilidades_requeridas', 'nome_habilidades',
+                  'estado', 'cidade', 'cep', 'lote', 'status', 'nome_status', 'data_criacao']
 
     def get_nome_status(self, instancia):
         return instancia.get_status_display()

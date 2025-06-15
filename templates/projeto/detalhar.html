@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Detalhes do Projeto - {{ projeto.titulo }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow-lg border-0 animate__animated animate__fadeIn">
+            <div class="card-body p-4">
+                <h2 class="mb-4">Detalhes do Projeto</h2>
+                {% if messages %}
+                <div class="alert alert-dismissible fade show" role="alert">
+                    {% for message in messages %}
+                    <div class="alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Informações Gerais</h4>
+                        <p><strong>Título:</strong> {{ projeto.titulo }}</p>
+                        <p><strong>Descrição:</strong> {{ projeto.descricao|default:"Nenhuma descrição fornecida." }}</p>
+                        <p><strong>Cliente:</strong> {{ projeto.cliente.nome }}</p>
+                        <p><strong>Status:</strong> <span class="badge bg-{% if projeto.status == 1 %}warning{% elif projeto.status == 2 %}info{% else %}success{% endif %}">{{ projeto.get_status_display }}</span></p>
+                        <p><strong>Data de Criação:</strong> {{ projeto.data_criacao|date:"d/m/Y H:i" }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Localização</h4>
+                        <p><strong>Estado:</strong> {{ projeto.estado|default:"Não informado" }}</p>
+                        <p><strong>Cidade:</strong> {{ projeto.cidade|default:"Não informado" }}</p>
+                        <p><strong>CEP:</strong> {{ projeto.cep|default:"Não informado" }}</p>
+                        <p><strong>Lote:</strong> {{ projeto.lote|default:"Não informado" }}</p>
+                        <h4>Habilidades Requeridas</h4>
+                        <p>
+                            {% for habilidade in projeto.get_habilidades_display %}
+                            <span class="badge bg-primary me-1">{{ habilidade }}</span>
+                            {% empty %}
+                            <span class="badge bg-secondary me-1">Nenhuma habilidade</span>
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end mt-4 flex-wrap gap-2">
+                    <a href="{% url 'listar-projetos' %}" class="btn btn-outline-secondary">Voltar</a>
+                    <a href="{% url 'listar-propostas-por-projeto' projeto_id=projeto.pk %}" class="btn btn-outline-info"><i class="fas fa-handshake"></i> Ver Propostas</a>
+                    {% if projeto.cliente == user.perfil %}
+                    <a href="{% url 'editar-projeto' pk=projeto.pk %}" class="btn btn-outline-primary"><i class="fas fa-edit"></i> Editar</a>
+                    <a href="{% url 'deletar-projeto' pk=projeto.pk %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i> Deletar</a>
+                    {% endif %}
+                    {% if user.perfil.papel == 1 %}
+                    <a href="{% url 'criar-proposta' projeto_id=projeto.pk %}" class="btn btn-primary"><i class="fas fa-plus"></i> Enviar Proposta</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block css_local %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<style>
+.card { border-radius: 15px; }
+.badge { font-size: 0.9rem; }
+.alert { margin-bottom: 1rem; }
+</style>
+{% endblock %}

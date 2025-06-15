@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}Criar Projeto - Freelancers Locais{% endblock %}
+{% block title %}Editar Projeto - Freelancers Locais{% endblock %}
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-8">
         <div class="card shadow-lg border-0 animate__animated animate__fadeIn">
             <div class="card-body p-4">
-                <h2 class="mb-4">Criar Projeto</h2>
+                <h2 class="mb-4">Editar Projeto</h2>
                 {% if messages %}
                 <div class="alert alert-dismissible fade show" role="alert">
                     {% for message in messages %}
@@ -57,7 +57,7 @@
                     </div>
                     <div class="d-flex justify-content-end">
                         <a href="{% url 'listar-projetos' %}" class="btn btn-outline-secondary me-2">Cancelar</a>
-                        <button type="submit" class="btn btn-primary">Salvar</button>
+                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
                     </div>
                 </form>
             </div>

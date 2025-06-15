@@ -5,9 +5,13 @@
     <h2 class="d-inline">Projetos</h2>
     <a href="{% url 'criar-projeto' %}" class="btn btn-success float-end"><i class="fas fa-plus"></i> Criar Projeto</a>
 </div>
+<div class="mb-3">
+    <a href="{% url 'listar-projetos' %}?status=ativos" class="btn btn-{% if status_filter == 'ativos' %}primary{% else %}outline-primary{% endif %} me-2">Projetos Ativos</a>
+    <a href="{% url 'listar-projetos' %}?status=concluidos" class="btn btn-{% if status_filter == 'concluidos' %}primary{% else %}outline-primary{% endif %}">Projetos Concluídos</a>
+</div>
 <div class="input-group mb-3">
     <span class="input-group-text"><i class="fas fa-search"></i></span>
-    <input type="text" class="form-control" id="searchInput" placeholder="Pesquisar por título, localização ou habilidade">
+    <input type="text" class="form-control" id="searchInput" placeholder="Pesquisar por título, cidade ou habilidade">
 </div>
 <div class="row" id="projetoList">
     {% for projeto in projetos %}
@@ -16,17 +20,25 @@
             <div class="card-body">
                 <h5 class="card-title">{{ projeto.titulo }}</h5>
                 <p class="card-text">{{ projeto.descricao|truncatewords:20 }}</p>
-                <p class="card-text"><strong>Localização:</strong> {{ projeto.localizacao }}</p>
+                <p class="card-text"><strong>Cidade:</strong> {{ projeto.cidade|default:"Não informado" }}, {{ projeto.estado|default:"Não informado" }}</p>
                 <p class="card-text"><strong>Habilidades:</strong>
-                    {% for habilidade in projeto.habilidades_requeridas %}
+                    {% for habilidade in projeto.get_habilidades_display %}
                     <span class="badge bg-primary me-1">{{ habilidade }}</span>
+                    {% empty %}
+                    <span class="badge bg-secondary me-1">Nenhuma habilidade</span>
                     {% endfor %}
                 </p>
                 <p class="card-text"><strong>Status:</strong> <span class="badge bg-{% if projeto.status == 1 %}warning{% elif projeto.status == 2 %}info{% else %}success{% endif %}">{{ projeto.get_status_display }}</span></p>
-                <div class="d-flex justify-content-between flex-wrap">
+                <div class="d-flex justify-content-between flex-wrap gap-2">
+                    <a href="{% url 'detalhar-projeto' pk=projeto.pk %}" class="btn btn-outline-info btn-sm"><i class="fas fa-eye"></i> Ver Detalhes</a>
+                    <a href="{% url 'listar-propostas-por-projeto' projeto_id=projeto.pk %}" class="btn btn-outline-info btn-sm"><i class="fas fa-handshake"></i> Ver Propostas</a>
+                    {% if projeto.cliente == user.perfil %}
                     <a href="{% url 'editar-projeto' pk=projeto.pk %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-edit"></i> Editar</a>
                     <a href="{% url 'deletar-projeto' pk=projeto.pk %}" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i> Deletar</a>
-                    <a href="{% url 'criar-proposta' projeto_id=projeto.pk %}" class="btn btn-outline-info btn-sm"><i class="fas fa-handshake"></i> Proposta</a>
+                    {% endif %}
+                    {% if user.perfil.papel == 1 %}
+                    <a href="{% url 'criar-proposta' projeto_id=projeto.pk %}" class="btn btn-outline-success btn-sm"><i class="fas fa-plus"></i> Enviar Proposta</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
