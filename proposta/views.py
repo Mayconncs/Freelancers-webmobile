@@ -46,20 +46,6 @@ class DetalharProposta(LoginRequiredMixin, DetailView):
     context_object_name = 'proposta'
     template_name = 'proposta/detalhar.html'
 
-class AceitarProposta(LoginRequiredMixin, CreateView):
-    model = Proposta
-    fields = []
-
-    def post(self, request, *args, **kwargs):
-        proposta = Proposta.objects.get(pk=self.kwargs['pk'])
-        if proposta.projeto.cliente != request.user.perfil:
-            messages.error(request, 'Você não tem permissão para aceitar esta proposta.')
-            return redirect('listar-propostas')
-        proposta.status = 2
-        proposta.save()
-        messages.success(self.request, 'Proposta aceita com sucesso!')
-        return redirect('listar-propostas')
-
 class APIListarPropostas(ListAPIView):
     serializer_class = SerializadorProposta
     authentication_classes = [TokenAuthentication]
@@ -67,9 +53,3 @@ class APIListarPropostas(ListAPIView):
 
     def get_queryset(self):
         return Proposta.objects.all()
-
-class APIAceitarProposta(RetrieveUpdateAPIView):
-    serializer_class = SerializadorProposta
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-    queryset = Proposta.objects.all()

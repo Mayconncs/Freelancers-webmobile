@@ -20,3 +20,6 @@ class Projeto(models.Model):
     def get_habilidades_display(self):
         from freelancer.consts import OPCOES_HABILIDADES
         return [dict(OPCOES_HABILIDADES).get(h, 'Desconhecido') for h in self.habilidades_requeridas]
+    
+    def __str__(self):
+        return self.titulo 

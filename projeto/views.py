@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -7,7 +8,6 @@ from rest_framework.permissions import IsAuthenticated
 from projeto.models import Projeto
 from projeto.forms import FormularioProjeto
 from projeto.serializers import SerializadorProjeto
-from django.shortcuts import redirect
 from django.contrib import messages
 from proposta.models import Proposta
 from proposta.serializers import SerializadorProposta
@@ -55,7 +55,7 @@ class EditarProjeto(LoginRequiredMixin, UpdateView):
         obj = super().get_object(queryset)
         if obj.cliente != self.request.user.perfil:
             messages.error(self.request, 'Você não tem permissão para editar este projeto.')
-            return redirect('listar-projetos')
+            raise Http404("Projeto não encontrado ou acesso não autorizado")
         return obj
 
     def form_valid(self, form):
@@ -72,7 +72,7 @@ class DeletarProjeto(LoginRequiredMixin, DeleteView):
         obj = super().get_object(queryset)
         if obj.cliente != self.request.user.perfil:
             messages.error(self.request, 'Você não tem permissão para deletar este projeto.')
-            return redirect('listar-projetos')
+            raise Http404("Projeto não encontrado ou acesso não autorizado")
         return obj
 
     def delete(self, request, *args, **kwargs):

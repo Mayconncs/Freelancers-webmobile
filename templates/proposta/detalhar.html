@@ -39,16 +39,7 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-end mt-4 flex-wrap gap-2">
-                    <a href="{% url 'listar-propostas' %}" class="btn btn-outline-secondary">Voltar</a>
-                    {% if proposta.status == 1 and user.perfil.papel == 2 and proposta.projeto.cliente == user.perfil %}
-                    <form method="post" action="{% url 'aceitar-proposta' pk=proposta.pk %}" class="d-inline">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Aceitar Proposta</button>
-                    </form>
-                    {% endif %}
-                    {% if proposta.status == 2 %}
-                    <a href="https://wa.me/?text=Olá, sobre o projeto {{ proposta.projeto.titulo }}" target="_blank" class="btn btn-primary"><i class="fab fa-whatsapp"></i> Contatar via WhatsApp</a>
-                    {% endif %}
+                    <a href="{% url 'listar-projetos' %}" class="btn btn-outline-secondary">Voltar</a>
                 </div>
             </div>
         </div>
