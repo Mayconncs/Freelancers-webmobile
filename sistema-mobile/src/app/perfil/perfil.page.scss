@@ -1,0 +1,14 @@
+@import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+
+ion-content {
+  --background: #f3f4f6;
+}
+
+ion-button {
+  --background: var(--ion-color-primary);
+  --background-activated: var(--ion-color-primary-shade);
+}
+
+ion-select, ion-textarea, ion-input {
+  --padding-start: 0;
+}

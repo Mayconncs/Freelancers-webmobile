@@ -1,0 +1,56 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Freelancers</ion-title>
+    <ion-text slot="end" class="ion-margin-end">
+      <h3 class="text-white">{{ usuario.nome }}</h3>
+    </ion-text>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding bg-gray-100">
+  <div class="flex flex-col min-h-full">
+    <div class="w-full max-w-2xl mx-auto">
+      <ion-searchbar
+        placeholder="Pesquisar por nome, cidade ou habilidade"
+        [(ngModel)]="filtro"
+        (ionInput)="filtrarFreelancers()"
+        class="mb-4 bg-white rounded-full shadow-sm"
+      ></ion-searchbar>
+      <ion-button expand="block" (click)="navegarParaCriarPerfil()" class="mb-6 bg-success hover:bg-success-dark">
+        Criar Perfil
+      </ion-button>
+      <ion-card *ngFor="let freelancer of lista_filtrada" class="mb-4 animate__animated animate__fadeInUp">
+        <ion-item (click)="navegarParaDetalhar(freelancer.id)" lines="none">
+          <ion-thumbnail slot="start" class="w-16 h-16">
+            <img *ngIf="freelancer.foto" [src]="freelancer.foto" class="rounded-full object-cover" />
+            <img *ngIf="!freelancer.foto" src="../../assets/imgs/thumbnail.svg" class="rounded-full" />
+          </ion-thumbnail>
+          <ion-label class="ml-4">
+            <h2 class="text-lg font-semibold">{{ freelancer.nome }}</h2>
+            <p class="text-sm text-gray-600">{{ freelancer.nome_papel }}</p>
+            <p class="text-sm text-gray-600">{{ freelancer.cidade || 'Não informado' }}, {{ freelancer.estado || 'Não informado' }}</p>
+            <div class="flex flex-wrap mt-2">
+              <span *ngFor="let habilidade of freelancer.nome_habilidades" class="bg-primary text-black text-xs px-2 py-1 rounded-full mr-2 mb-2">
+                {{ habilidade }}
+              </span>
+            </div>
+          </ion-label>
+        </ion-item>
+        <ion-item-options *ngIf="freelancer.usuario === usuario.id">
+          <ion-item-option color="danger" (click)="excluirFreelancer(freelancer.id)">
+            <ion-icon name="trash" slot="start"></ion-icon>
+            Excluir
+          </ion-item-option>
+        </ion-item-options>
+      </ion-card>
+      <ion-card *ngIf="lista_filtrada.length === 0" class="text-center">
+        <ion-card-content>
+          <p class="text-gray-600">Nenhum freelancer encontrado.</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>

@@ -56,6 +56,22 @@ out-tsc/
 coverage/
 .angular/
 
+# === Ionic/Capacitor ===
+# (dentro da pasta sistema-mobile ou similar)
+sistema-mobile/android/
+sistema-mobile/ios/
+sistema-mobile/www/
+sistema-mobile/resources/
+sistema-mobile/.capacitor/
+sistema-mobile/.ionic/
+sistema-mobile/.sass-cache/
+sistema-mobile/.DS_Store
+
+# Arquivos do Capacitor
+capacitor.config.ts
+capacitor.config.json
+capacitor.config.js
+
 # Arquivos temporários
 tmp/
 temp/

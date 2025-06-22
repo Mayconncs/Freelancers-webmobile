@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, redirect
 from freelancer.models import Perfil
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from freelancer.forms import FormularioPerfil
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework.generics import ListAPIView
 from rest_framework.authentication import TokenAuthentication
@@ -14,6 +14,7 @@ from freelancer.serializers import SerializadorPerfil
 from django.contrib import messages
 from freelancer.consts import OPCOES_PAPEIS
 from django.db import IntegrityError
+from rest_framework.viewsets import ModelViewSet
 
 class ListarFreelancers(LoginRequiredMixin, ListView):
     model = Perfil
@@ -96,10 +97,26 @@ class DeletarPerfil(LoginRequiredMixin, DeleteView):
         messages.success(self.request, 'Perfil deletado com sucesso!')
         return super().delete(request, *args, **kwargs)
 
-class APIListarFreelancers(ListAPIView):
+class FreelancerViewSet(ModelViewSet):
     serializer_class = SerializadorPerfil
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    queryset = Perfil.objects.all()
 
     def get_queryset(self):
-        return Perfil.objects.filter(papel=1)
+        if self.action == 'list':
+            return Perfil.objects.filter(papel=1)
+        return Perfil.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save(usuario=self.request.user)
+
+    def perform_update(self, serializer):
+        if serializer.instance.usuario != self.request.user:
+            raise PermissionDenied("Você não tem permissão para editar este perfil.")
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        if instance.usuario != self.request.user:
+            raise PermissionDenied("Você não tem permissão para deletar este perfil.")
+        instance.delete()

@@ -1,0 +1,78 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/freelancer"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Detalhes do Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding bg-gray-100">
+  <div class="flex flex-col min-h-full">
+    <div class="w-full max-w-md mx-auto bg-white rounded-lg shadow-lg p-6 animate__animated animate__fadeIn">
+      <div class="text-center mb-6">
+        <img
+          *ngIf="freelancer.foto"
+          [src]="freelancer.foto"
+          class="w-32 h-32 rounded-full mx-auto object-cover border-4 border-primary"
+        />
+        <div
+          *ngIf="!freelancer.foto"
+          class="w-32 h-32 rounded-full mx-auto bg-gray-300 flex items-center justify-center text-white text-4xl"
+        >
+          <ion-icon name="person"></ion-icon>
+        </div>
+        <h2 class="text-2xl font-bold mt-4">{{ freelancer.nome }}</h2>
+        <p class="text-gray-600">{{ freelancer.nome_papel }}</p>
+      </div>
+      <ion-list lines="none">
+        <ion-item class="mb-2">
+          <ion-label>
+            <h3 class="text-sm font-semibold text-gray-700">Email</h3>
+            <p>{{ freelancer.email_contato || 'Não informado' }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item class="mb-2">
+          <ion-label>
+            <h3 class="text-sm font-semibold text-gray-700">Telefone</h3>
+            <p>{{ freelancer.telefone || 'Não informado' }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item class="mb-2">
+          <ion-label>
+            <h3 class="text-sm font-semibold text-gray-700">Endereço</h3>
+            <p>{{ freelancer.cidade || 'Não informado' }}, {{ freelancer.estado || 'Não informado' }}</p>
+            <p>{{ freelancer.cep || 'Não informado' }} {{ freelancer.lote ? 'Lote ' + freelancer.lote : '' }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item class="mb-2">
+          <ion-label>
+            <h3 class="text-sm font-semibold text-gray-700">Habilidades</h3>
+            <div class="flex flex-wrap">
+              <span *ngFor="let habilidade of freelancer.nome_habilidades" class="bg-primary text-black text-xs px-2 py-1 rounded-full mr-2 mb-2">
+                {{ habilidade }}
+              </span>
+              <span *ngIf="!freelancer.nome_habilidades.length" class="text-gray-600">Nenhuma habilidade</span>
+            </div>
+          </ion-label>
+        </ion-item>
+        <ion-item class="mb-2">
+          <ion-label>
+            <h3 class="text-sm font-semibold text-gray-700">Bio</h3>
+            <p>{{ freelancer.bio || 'Nenhuma bio fornecida.' }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      <div class="flex justify-end mt-6" *ngIf="freelancer.usuario === usuario.id">
+        <ion-button fill="outline" color="primary" (click)="navegarParaEditar(freelancer.id)" class="mr-2">
+          <ion-icon name="create" slot="start"></ion-icon>
+          Editar
+        </ion-button>
+        <ion-button fill="outline" color="danger" (click)="excluirPerfil(freelancer.id)">
+          <ion-icon name="trash" slot="start"></ion-icon>
+          Excluir
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>

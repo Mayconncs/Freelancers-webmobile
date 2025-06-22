@@ -7,6 +7,9 @@ from django.contrib import messages
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
+from rest_framework.views import APIView
+from rest_framework import status
+
 
 class Login(View):
     def get(self, request):
@@ -89,3 +92,39 @@ class LoginAPI(ObtainAuthToken):
             'token': token.key,
             'papel': user.perfil.papel if hasattr(user, 'perfil') else None
         })
+
+class CadastroAPI(APIView):
+    def post(self, request, *args, **kwargs):
+        username = request.data.get('username')
+        email = request.data.get('email')
+        password = request.data.get('password')
+        confirmar_senha = request.data.get('confirmar_senha')
+
+        if not all([username, email, password, confirmar_senha]):
+            return Response({'detail': 'Todos os campos são obrigatórios.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if password != confirmar_senha:
+            return Response({'detail': 'As senhas não coincidem.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if User.objects.filter(username=username).exists():
+            return Response({'detail': 'Usuário já existe.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if User.objects.filter(email=email).exists():
+            return Response({'detail': 'Email já cadastrado.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password
+            )
+            user.save()
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'token': token.key
+            }, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({'detail': f'Erro ao cadastrar: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)

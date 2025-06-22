@@ -1,0 +1,48 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding bg-gray-100">
+  <div class="flex flex-col items-center justify-center min-h-full">
+    <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-6 animate__animated animate__fadeIn">
+      <h2 class="text-2xl font-bold text-center mb-6 text-primary">Freelancers Locais</h2>
+      <form (ngSubmit)="autenticarUsuario()">
+        <ion-list lines="none">
+          <ion-item class="mb-4">
+            <ion-input
+              label="Usuário"
+              labelPlacement="floating"
+              type="text"
+              [(ngModel)]="instancia.username"
+              name="usuario"
+              required
+              class="border-b-2 border-gray-300 focus:border-primary"
+            ></ion-input>
+          </ion-item>
+          <ion-item class="mb-6">
+            <ion-input
+              label="Senha"
+              labelPlacement="floating"
+              type="password"
+              [(ngModel)]="instancia.password"
+              name="senha"
+              required
+              class="border-b-2 border-gray-300 focus:border-primary"
+            ></ion-input>
+          </ion-item>
+        </ion-list>
+        <ion-button expand="block" type="submit" class="bg-primary hover:bg-primary-dark">
+          Entrar
+        </ion-button>
+        <p class="text-center mt-4 text-gray-600">
+          Não tem conta? <a class="text-primary hover:underline" (click)="navegarParaCadastro()">Cadastre-se</a>
+        </p>
+      </form>
+    </div>
+  </div>
+</ion-content>

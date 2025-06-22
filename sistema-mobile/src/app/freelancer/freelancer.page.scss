@@ -1,0 +1,21 @@
+@import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+
+ion-content {
+  --background: #f3f4f6;
+}
+
+ion-card {
+  --background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+ion-button.bg-success {
+  --background: #28a745;
+  --background-activated: #218838;
+}
+
+ion-searchbar {
+  --background: #ffffff;
+  --border-radius: 9999px;
+}

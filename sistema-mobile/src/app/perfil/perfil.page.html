@@ -1,0 +1,133 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/freelancer"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ isEditing ? 'Editar Perfil' : 'Criar Perfil' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding bg-gray-100">
+  <div class="flex flex-col min-h-full">
+    <div class="w-full max-w-md mx-auto bg-white rounded-lg shadow-lg p-6 animate__animated animate__fadeIn">
+      <form (ngSubmit)="salvarPerfil()" #perfilForm="ngForm">
+        <ion-list lines="none">
+          <ion-item class="mb-4">
+            <ion-input
+              label="Nome"
+              labelPlacement="floating"
+              type="text"
+              [(ngModel)]="freelancer.nome"
+              name="nome"
+              required
+              class="border-b-2 border-gray-300 focus:border-primary"
+            ></ion-input>
+          </ion-item>
+          <ion-item class="mb-4">
+            <ion-select label="Papel" [(ngModel)]="freelancer.papel" name="papel" required>
+              <ion-select-option [value]="1">Freelancer</ion-select-option>
+              <ion-select-option [value]="2">Cliente</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item class="mb-4">
+            <ion-input
+              label="Estado"
+              labelPlacement="floating"
+              type="text"
+              [(ngModel)]="freelancer.estado"
+              name="estado"
+              maxlength="2"
+              placeholder="Ex: SP"
+              class="border-b-2 border-gray-300 focus:border-primary"
+            ></ion-input>
+          </ion-item>
+          <ion-item class="mb-4">
+            <ion-input
+              label="Cidade"
+              labelPlacement="floating"
+              type="text"
+              [(ngModel)]="freelancer.cidade"
+              name="cidade"
+              class="border-b-2 border-gray-300 focus:border-primary"
+            ></ion-input>
+          </ion-item>
+          <ion-item class="mb-4">
+            <ion-input
+              label="CEP"
+              labelPlacement="floating"
+              type="text"
+              [(ngModel)]="freelancer.cep"
+              name="cep"
+              placeholder="12345-678"
+              class="border-b-2 border-gray-300 focus:border-primary"
+            ></ion-input>
+          </ion-item>
+          <ion-item class="mb-4">
+            <ion-input
+              label="Lote"
+              labelPlacement="floating"
+              type="text"
+              [(ngModel)]="freelancer.lote"
+              name="lote"
+              class="border-b-2 border-gray-300 focus:border-primary"
+            ></ion-input>
+          </ion-item>
+          <ion-item class="mb-4">
+            <ion-input
+              label="Telefone"
+              labelPlacement="floating"
+              type="text"
+              [(ngModel)]="freelancer.telefone"
+              name="telefone"
+              placeholder="(11) 91234-5678"
+              class="border-b-2 border-gray-300 focus:border-primary"
+            ></ion-input>
+          </ion-item>
+          <ion-item class="mb-4">
+            <ion-input
+              label="Email de Contato"
+              labelPlacement="floating"
+              type="email"
+              [(ngModel)]="freelancer.email_contato"
+              name="email_contato"
+              class="border-b-2 border-gray-300 focus:border-primary"
+            ></ion-input>
+          </ion-item>
+          <ion-item class="mb-4">
+            <ion-select label="Habilidades" [(ngModel)]="freelancer.habilidades" name="habilidades" multiple="true">
+              <ion-select-option [value]="1">Desenvolvimento Web</ion-select-option>
+              <ion-select-option [value]="2">Design Gráfico</ion-select-option>
+              <ion-select-option [value]="3">Redação</ion-select-option>
+              <ion-select-option [value]="4">Marketing Digital</ion-select-option>
+              <ion-select-option [value]="5">Fotografia</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item class="mb-4">
+            <ion-textarea
+              label="Bio"
+              labelPlacement="floating"
+              [(ngModel)]="freelancer.bio"
+              name="bio"
+              rows="4"
+              class="border-b-2 border-gray-300 focus:border-primary"
+            ></ion-textarea>
+          </ion-item>
+          <ion-item class="mb-6">
+            <ion-input
+              label="Foto de Perfil"
+              type="file"
+              accept="image/*"
+              (change)="onFileSelected($event)"
+              name="foto"
+              class="border-b-2 border-gray-300 focus:border-primary"
+            ></ion-input>
+            <img *ngIf="freelancer.foto" [src]="freelancer.foto" class="mt-2 w-24 h-24 rounded-full object-cover" />
+          </ion-item>
+        </ion-list>
+        <ion-button expand="block" type="submit" [disabled]="!perfilForm.valid" class="bg-primary hover:bg-primary-dark">
+          Salvar
+        </ion-button>
+      </form>
+    </div>
+  </div>
+</ion-content>
