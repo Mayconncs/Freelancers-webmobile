@@ -4,6 +4,7 @@ export class Usuario {
   public email: string;
   public token: string;
   public papel: number;
+  public perfil_id: number;
 
   constructor() {
     this.id = 0;
@@ -11,5 +12,6 @@ export class Usuario {
     this.email = '';
     this.token = '';
     this.papel = 0;
+    this.perfil_id = 0;
   }
 }

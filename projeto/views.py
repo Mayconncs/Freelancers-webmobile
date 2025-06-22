@@ -2,6 +2,7 @@ from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListAPIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -10,6 +11,7 @@ from projeto.forms import FormularioProjeto
 from projeto.serializers import SerializadorProjeto
 from django.contrib import messages
 from proposta.models import Proposta
+from rest_framework.exceptions import PermissionDenied
 from proposta.serializers import SerializadorProposta
 
 class ListarProjetos(LoginRequiredMixin, ListView):
@@ -103,3 +105,24 @@ class APIListarProjetos(ListAPIView):
         if status_filter == 'concluidos':
             return Projeto.objects.filter(status=3)
         return Projeto.objects.filter(status__in=[1, 2])
+    
+class ProjetoViewSet(ModelViewSet):
+    serializer_class = SerializadorProjeto
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = Projeto.objects.all()
+
+    def get_queryset(self):
+        status_filter = self.request.GET.get('status', 'ativos')
+        if status_filter == 'concluidos':
+            return Projeto.objects.filter(status=3)
+        return Projeto.objects.filter(status__in=[1, 2])
+
+    def perform_create(self, serializer):
+        serializer.save(cliente=self.request.user.perfil)
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        instance.delete()

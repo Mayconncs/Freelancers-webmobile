@@ -8,9 +8,15 @@
     <ion-content>
       <ion-list>
         <ion-menu-toggle>
-          <ion-item routerLink="/lista" routerDirection="root">
+          <ion-item routerLink="/freelancer" routerDirection="root">
             <ion-icon name="people" slot="start"></ion-icon>
             <ion-label>Freelancers</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+        <ion-menu-toggle>
+          <ion-item routerLink="/projeto" routerDirection="root">
+            <ion-icon name="briefcase" slot="start"></ion-icon>
+            <ion-label>Projetos</ion-label>
           </ion-item>
         </ion-menu-toggle>
         <ion-menu-toggle *ngIf="isAuthenticated">

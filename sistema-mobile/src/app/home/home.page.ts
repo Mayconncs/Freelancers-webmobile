@@ -35,7 +35,10 @@ export class HomePage implements OnInit {
     password: '',
   };
 
+  public errorMessage: string = ''; 
+
   async autenticarUsuario() {
+    this.errorMessage = ''; 
     const loading = await this.controle_carregamento.create({ message: 'Autenticando...', duration: 15000 });
     await loading.present();
 
@@ -54,11 +57,13 @@ export class HomePage implements OnInit {
         this.controle_navegacao.navigateRoot('/freelancer');
       } else {
         loading.dismiss();
+        this.errorMessage = 'Usuário ou senha incorretos'; 
         await this.apresenta_mensagem(`Falha ao autenticar: código ${resposta.status}`);
       }
     } catch (erro: any) {
       console.error(erro);
       loading.dismiss();
+      this.errorMessage = 'Usuário ou senha incorretos';
       await this.apresenta_mensagem(`Erro: ${erro?.status || 'Desconhecido'}`);
     }
   }

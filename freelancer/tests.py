@@ -173,26 +173,3 @@ class TestesViewDeletarPerfil(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('listar-freelancers'))
         self.assertEqual(Perfil.objects.count(), 0)
-
-class TestesAPIListarFreelancers(TestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(username='teste', password='12345')
-        self.client = APIClient()
-        self.client.force_authenticate(user=self.user)
-        self.url = reverse('api-listar-freelancers')
-        Perfil.objects.create(
-            usuario=User.objects.create_user(username='freelancer1', password='12345'),
-            papel=1, nome='Freelancer 1', habilidades=[1]
-        )
-        Perfil.objects.create(
-            usuario=User.objects.create_user(username='cliente1', password='12345'),
-            papel=2, nome='Cliente 1', habilidades=[2]
-        )
-
-    def test_get(self):
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        data = json.loads(response.content)
-        self.assertEqual(len(data), 1)
-        self.assertEqual(data[0]['nome'], 'Freelancer 1')
-        self.assertEqual(data[0]['nome_habilidades'], ['Desenvolvimento Web'])

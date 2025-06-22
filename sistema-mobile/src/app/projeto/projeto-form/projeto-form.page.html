@@ -1,0 +1,103 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/projeto"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ isEditing ? 'Editar Projeto' : 'Criar Projeto' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding bg-gray-100">
+  <div class="flex flex-col min-h-full">
+    <div class="w-full max-w-md mx-auto bg-white rounded-lg shadow-lg p-6 animate__animated animate__fadeIn">
+      <form (ngSubmit)="salvarProjeto()" #projetoForm="ngForm">
+        <ion-list lines="none">
+          <ion-item class="mb-4">
+            <ion-input
+              label="Título"
+              labelPlacement="floating"
+              type="text"
+              [(ngModel)]="projeto.titulo"
+              name="titulo"
+              required
+              class="border-b-2 border-gray-300 focus:border-primary"
+            ></ion-input>
+          </ion-item>
+          <ion-item class="mb-4">
+            <ion-textarea
+              label="Descrição"
+              labelPlacement="floating"
+              [(ngModel)]="projeto.descricao"
+              name="descricao"
+              rows="4"
+              required
+              class="border-b-2 border-gray-300 focus:border-primary"
+            ></ion-textarea>
+          </ion-item>
+          <ion-item class="mb-4">
+            <ion-select label="Status" [(ngModel)]="projeto.status" name="status" required>
+              <ion-select-option [value]="1">Pendente</ion-select-option>
+              <ion-select-option [value]="2">Em Andamento</ion-select-option>
+              <ion-select-option [value]="3">Concluído</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item class="mb-4">
+            <ion-select label="Habilidades Requeridas" [(ngModel)]="projeto.habilidades_requeridas" name="habilidades_requeridas" multiple="true">
+              <ion-select-option [value]="1">Desenvolvimento Web</ion-select-option>
+              <ion-select-option [value]="2">Design Gráfico</ion-select-option>
+              <ion-select-option [value]="3">Redação</ion-select-option>
+              <ion-select-option [value]="4">Marketing Digital</ion-select-option>
+              <ion-select-option [value]="5">Fotografia</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item class="mb-4">
+            <ion-input
+              label="Estado"
+              labelPlacement="floating"
+              type="text"
+              [(ngModel)]="projeto.estado"
+              name="estado"
+              maxlength="2"
+              placeholder="Ex: SP"
+              class="border-b-2 border-gray-300 focus:border-primary"
+            ></ion-input>
+          </ion-item>
+          <ion-item class="mb-4">
+            <ion-input
+              label="Cidade"
+              labelPlacement="floating"
+              type="text"
+              [(ngModel)]="projeto.cidade"
+              name="cidade"
+              class="border-b-2 border-gray-300 focus:border-primary"
+            ></ion-input>
+          </ion-item>
+          <ion-item class="mb-4">
+            <ion-input
+              label="CEP"
+              labelPlacement="floating"
+              type="text"
+              [(ngModel)]="projeto.cep"
+              name="cep"
+              placeholder="12345-678"
+              class="border-b-2 border-gray-300 focus:border-primary"
+            ></ion-input>
+          </ion-item>
+          <ion-item class="mb-4">
+            <ion-input
+              label="Lote"
+              labelPlacement="floating"
+              type="text"
+              [(ngModel)]="projeto.lote"
+              name="lote"
+              class="border-b-2 border-gray-300 focus:border-primary"
+            ></ion-input>
+          </ion-item>
+        </ion-list>
+        <ion-button expand="block" type="submit" [disabled]="!projetoForm.valid" class="bg-primary hover:bg-primary-dark">
+          Salvar
+        </ion-button>
+      </form>
+    </div>
+  </div>
+</ion-content>

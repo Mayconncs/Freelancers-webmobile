@@ -31,11 +31,19 @@ export const routes: Routes = [
     loadComponent: () => import('./detalhar/detalhar.page').then((m) => m.DetalharPage),
   },
   {
-    path: 'cadastro',
-    loadComponent: () => import('./cadastro/cadastro.page').then( m => m.CadastroPage)
+    path: 'projeto',
+    loadComponent: () => import('./projeto/projeto.page').then((m) => m.ProjetoPage),
   },
   {
-    path: 'detalhar',
-    loadComponent: () => import('./detalhar/detalhar.page').then( m => m.DetalharPage)
+    path: 'projeto-form',
+    loadComponent: () => import('./projeto/projeto-form/projeto-form.page').then((m) => m.ProjetoFormPage),
+  },
+  {
+    path: 'projeto-form/:id',
+    loadComponent: () => import('./projeto/projeto-form/projeto-form.page').then((m) => m.ProjetoFormPage),
+  },
+  {
+    path: 'detalhar-projeto/:id',
+    loadComponent: () => import('./projeto/detalhar/detalhar.page').then((m) => m.DetalharProjetoPage),
   },
 ];

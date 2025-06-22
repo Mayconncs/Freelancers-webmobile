@@ -36,6 +36,7 @@
             ></ion-input>
           </ion-item>
         </ion-list>
+        <p *ngIf="errorMessage" class="text-center text-red-500 mb-4">{{ errorMessage }}</p>
         <ion-button expand="block" type="submit" class="bg-primary hover:bg-primary-dark">
           Entrar
         </ion-button>

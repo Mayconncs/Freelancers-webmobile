@@ -1,5 +1,9 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from projeto.views import *
+
+router = DefaultRouter()
+router.register(r'api', ProjetoViewSet, basename='projeto')
 
 urlpatterns = [
     path('', ListarProjetos.as_view(), name='listar-projetos'),
@@ -8,5 +12,5 @@ urlpatterns = [
     path('editar/<int:pk>/', EditarProjeto.as_view(), name='editar-projeto'),
     path('deletar/<int:pk>/', DeletarProjeto.as_view(), name='deletar-projeto'),
     path('propostas/<int:projeto_id>/', ListarPropostasPorProjeto.as_view(), name='listar-propostas-por-projeto'),
-    path('api/', APIListarProjetos.as_view(), name='api-listar-projetos'),
+    path('', include(router.urls)),
 ]
