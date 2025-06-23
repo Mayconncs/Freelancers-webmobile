@@ -38,7 +38,7 @@ export class DetalharProjetoPage implements OnInit {
     const registro = await this.storage.get('usuario');
     if (registro) {
       this.usuario = Object.assign(new Usuario(), registro);
-      if (!this.usuario.perfil_id) {
+      if (!this.usuario.freelancer_id) {
         await this.carregarPerfilUsuario();
       }
       const id = this.route.snapshot.paramMap.get('id');
@@ -66,14 +66,14 @@ export class DetalharProjetoPage implements OnInit {
     try {
       const resposta: HttpResponse = await CapacitorHttp.get(options);
       if (resposta.status === 200 && resposta.data.length > 0) {
-        this.usuario.perfil_id = resposta.data[0].id;
+        this.usuario.freelancer_id = resposta.data[0].id;
         await this.storage.set('usuario', this.usuario);
       } else {
         await this.apresenta_mensagem('Perfil não encontrado.');
         this.controle_navegacao.navigateBack('/projeto');
       }
     } catch (erro: any) {
-      console.error('Erro ao carregar perfil:', erro);
+      console.error('Erro ao carregar freelancer:', erro);
       await this.apresenta_mensagem(`Erro ao carregar perfil: ${erro?.status || 'Desconhecido'}`);
     }
   }

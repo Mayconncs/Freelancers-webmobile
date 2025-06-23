@@ -40,7 +40,7 @@ export class ProjetoFormPage implements OnInit {
     const registro = await this.storage.get('usuario');
     if (registro) {
       this.usuario = Object.assign(new Usuario(), registro);
-      if (!this.usuario.perfil_id) {
+      if (!this.usuario.freelancer_id) {
         await this.carregarPerfilUsuario();
       }
       const id = this.route.snapshot.paramMap.get('id');
@@ -66,7 +66,7 @@ export class ProjetoFormPage implements OnInit {
     try {
       const resposta: HttpResponse = await CapacitorHttp.get(options);
       if (resposta.status === 200 && resposta.data.length > 0) {
-        this.usuario.perfil_id = resposta.data[0].id;
+        this.usuario.freelancer_id = resposta.data[0].id;
         await this.storage.set('usuario', this.usuario);
       } else {
         await this.apresenta_mensagem('Perfil não encontrado. Crie um perfil primeiro.');
@@ -126,7 +126,7 @@ export class ProjetoFormPage implements OnInit {
     formData.append('cep', this.projeto.cep || '');
     formData.append('lote', this.projeto.lote || '');
     formData.append('status', this.projeto.status.toString());
-    formData.append('cliente', this.usuario.perfil_id.toString());
+    formData.append('cliente', this.usuario.freelancer_id.toString()); // Alterado para freelancer_id
 
     const options: HttpOptions = {
       headers: {

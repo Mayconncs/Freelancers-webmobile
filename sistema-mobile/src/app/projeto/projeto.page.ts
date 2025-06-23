@@ -40,7 +40,7 @@ export class ProjetoPage implements OnInit {
     const registro = await this.storage.get('usuario');
     if (registro) {
       this.usuario = Object.assign(new Usuario(), registro);
-      if (!this.usuario.perfil_id) {
+      if (!this.usuario.freelancer_id) {
         await this.carregarPerfilUsuario();
       }
       await this.consultarProjetosSistemaWeb();
@@ -65,7 +65,7 @@ export class ProjetoPage implements OnInit {
     try {
       const resposta: HttpResponse = await CapacitorHttp.get(options);
       if (resposta.status === 200 && resposta.data.length > 0) {
-        this.usuario.perfil_id = resposta.data[0].id;
+        this.usuario.freelancer_id = resposta.data[0].id;
         await this.storage.set('usuario', this.usuario);
       } else {
         await this.apresenta_mensagem('Perfil não encontrado.');

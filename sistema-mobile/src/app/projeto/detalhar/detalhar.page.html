@@ -45,8 +45,11 @@
             <p>{{ projeto.data_criacao | date:'short' }}</p>
           </ion-label>
         </ion-item>
+        <span>
+          {{ projeto.cliente }} {{ usuario.freelancer_id }}
+        </span>
       </ion-list>
-      <div class="flex justify-end mt-6" *ngIf="projeto.cliente === usuario.perfil_id">
+      <div class="flex justify-end mt-6" *ngIf="projeto.cliente === usuario.freelancer_id">
         <ion-button fill="outline" color="primary" (click)="navegarParaEditar(projeto.id)" class="mr-2">
           <ion-icon name="create" slot="start"></ion-icon>
           Editar

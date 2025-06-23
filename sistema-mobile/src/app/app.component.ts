@@ -26,7 +26,7 @@ import { Usuario } from './home/usuario.model';
 export class AppComponent implements OnInit {
   public isAuthenticated: boolean = false;
   public usuario: Usuario = new Usuario();
-  public profileId: number | null = null;
+  public freelancerId: number | null = null;
 
   constructor(
     private storage: Storage,
@@ -59,7 +59,9 @@ export class AppComponent implements OnInit {
         const profiles = resposta.data;
         const userProfile = profiles.find((profile: any) => profile.usuario === this.usuario.id);
         if (userProfile) {
-          this.profileId = userProfile.id;
+          this.freelancerId = userProfile.id;
+          this.usuario.freelancer_id = userProfile.id;
+          await this.storage.set('usuario', this.usuario);
         } else {
           console.warn('Perfil do usuário não encontrado.');
         }
@@ -78,8 +80,8 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    if (this.profileId) {
-      this.navController.navigateForward(`/detalhar/${this.profileId}`);
+    if (this.freelancerId) {
+      this.navController.navigateForward(`/detalhar/${this.freelancerId}`);
     } else {
       await this.presentToast('Você ainda não possui um perfil. Crie um agora.');
       this.navController.navigateForward('/perfil');
@@ -89,7 +91,7 @@ export class AppComponent implements OnInit {
   async logout() {
     await this.storage.remove('usuario');
     this.isAuthenticated = false;
-    this.profileId = null;
+    this.freelancerId = null;
     await this.presentToast('Logout realizado com sucesso!', 'success');
     this.navController.navigateRoot('/home');
   }

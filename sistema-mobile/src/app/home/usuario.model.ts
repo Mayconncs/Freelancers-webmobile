@@ -1,17 +1,19 @@
 export class Usuario {
   public id: number;
-  public nome: string;
+  public username: string;
   public email: string;
   public token: string;
-  public papel: number;
-  public perfil_id: number;
+  public nome: string;
+  public perfil_id: number; 
+  public freelancer_id: number; 
 
   constructor() {
     this.id = 0;
-    this.nome = '';
+    this.username = '';
     this.email = '';
     this.token = '';
-    this.papel = 0;
+    this.nome = '';
     this.perfil_id = 0;
+    this.freelancer_id = 0;
   }
 }
