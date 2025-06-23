@@ -10,6 +10,7 @@ import { Storage } from '@ionic/storage-angular';
 import { Freelancer } from './freelancer.model';
 import { Usuario } from '../home/usuario.model';
 import { CapacitorHttp, HttpOptions, HttpResponse } from '@capacitor/core';
+import { AppComponent } from '../app.component';
 
 @Component({
   standalone: true,
@@ -32,7 +33,8 @@ export class FreelancerPage implements OnInit {
     public storage: Storage,
     public controle_toast: ToastController,
     public controle_navegacao: NavController,
-    public controle_carregamento: LoadingController
+    public controle_carregamento: LoadingController,
+    private appComponent: AppComponent
   ) {}
 
   async ngOnInit() {
@@ -44,6 +46,11 @@ export class FreelancerPage implements OnInit {
     } else {
       this.controle_navegacao.navigateRoot('/home');
     }
+  }
+
+  async ionViewWillEnter() {
+    await this.appComponent.checkAuthStatus();
+    await this.consultarFreelancersSistemaWeb();
   }
 
   async consultarFreelancersSistemaWeb() {

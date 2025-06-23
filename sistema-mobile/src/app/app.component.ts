@@ -35,12 +35,20 @@ export class AppComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    await this.checkAuthStatus();
+  }
+
+  async checkAuthStatus() {
     await this.storage.create();
     const registro = await this.storage.get('usuario');
     if (registro) {
       this.usuario = Object.assign(new Usuario(), registro);
       this.isAuthenticated = true;
       await this.fetchUserProfile();
+    } else {
+      this.isAuthenticated = false;
+      this.freelancerId = null;
+      this.usuario = new Usuario();
     }
   }
 
@@ -92,6 +100,7 @@ export class AppComponent implements OnInit {
     await this.storage.remove('usuario');
     this.isAuthenticated = false;
     this.freelancerId = null;
+    this.usuario = new Usuario();
     await this.presentToast('Logout realizado com sucesso!', 'success');
     this.navController.navigateRoot('/home');
   }

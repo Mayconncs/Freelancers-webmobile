@@ -4,6 +4,7 @@ import { CapacitorHttp, HttpOptions, HttpResponse } from '@capacitor/core';
 import { IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonList, IonItem, IonInput, IonButton, LoadingController, NavController, ToastController } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { Storage } from '@ionic/storage-angular';
+import { Usuario } from '../home/usuario.model';
 
 @Component({
   selector: 'app-cadastro',
@@ -51,11 +52,14 @@ export class CadastroPage {
     try {
       const resposta: HttpResponse = await CapacitorHttp.post(options);
       if (resposta.status === 201) {
-        const userData = {
+        const userData: Usuario = {
           id: resposta.data.id,
           username: resposta.data.username,
           email: resposta.data.email,
           token: resposta.data.token,
+          nome: '',
+          perfil_id: 0,
+          freelancer_id: 0,
         };
         await this.storage.create();
         await this.storage.set('usuario', userData);
