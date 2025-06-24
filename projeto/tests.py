@@ -6,7 +6,8 @@ from projeto.forms import FormularioProjeto
 from freelancer.models import Perfil
 from freelancer.consts import OPCOES_PAPEIS, OPCOES_HABILIDADES
 from rest_framework.test import APIClient
-import json
+from rest_framework.authtoken.models import Token
+from rest_framework import status
 
 class TestesModelProjeto(TestCase):
     def setUp(self):
@@ -298,3 +299,48 @@ class TestesViewListarPropostasPorProjeto(TestCase):
         self.assertEqual(len(response.context['propostas']), 1)
         self.assertEqual(response.context['propostas'][0].freelancer.nome, 'Freelancer Teste')
         self.assertEqual(response.context['projeto'].pk, self.projeto.pk)
+
+class TestesAPIProjetoViewSet(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(username='cliente', password='12345')
+        self.token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token.key}')
+        
+        self.perfil = Perfil.objects.create(
+            usuario=self.user,
+            papel=2, 
+            nome='Cliente Teste',
+            habilidades=[1],
+            email_contato='cliente@exemplo.com'
+        )
+        Projeto.objects.create(
+            cliente=self.perfil,
+            titulo='Projeto Pendente',
+            descricao='Descrição do projeto.',
+            habilidades_requeridas=[1, 2],
+            estado='SP',
+            cidade='São Paulo',
+            cep='12345-678',
+            status=1,
+            lote='Lote 123'
+        )
+        Projeto.objects.create(
+            cliente=self.perfil,
+            titulo='Projeto Concluído',
+            descricao='Descrição concluída.',
+            habilidades_requeridas=[1],
+            status=3
+        )
+        self.url = reverse('projeto-list')
+
+    def test_listar_projetos_ativos(self):
+        response = self.client.get(self.url, {'status': 'ativos'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1) 
+        self.assertEqual(response.data[0]['titulo'], 'Projeto Pendente')
+        self.assertEqual(response.data[0]['nome_status'], 'PENDENTE')
+        self.assertEqual(response.data[0]['nome_habilidades'], ['Desenvolvimento Web', 'Design Gráfico'])
+        self.assertEqual(response.data[0]['cliente_info']['nome'], 'Cliente Teste')
+        self.assertEqual(response.data[0]['cliente_info']['email_contato'], 'cliente@exemplo.com')
+        self.assertNotIn('Projeto Concluído', [projeto['titulo'] for projeto in response.data])

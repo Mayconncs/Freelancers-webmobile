@@ -5,7 +5,8 @@ from freelancer.models import Perfil
 from freelancer.forms import FormularioPerfil
 from freelancer.consts import OPCOES_HABILIDADES, OPCOES_PAPEIS
 from rest_framework.test import APIClient
-import json
+from rest_framework.authtoken.models import Token
+from rest_framework import status
 
 class TestesModelPerfil(TestCase):
     def setUp(self):
@@ -173,3 +174,39 @@ class TestesViewDeletarPerfil(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('listar-freelancers'))
         self.assertEqual(Perfil.objects.count(), 0)
+
+class TestesAPIFreelancerViewSet(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(username='teste', password='12345')
+        self.token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.token.key}')
+        
+        Perfil.objects.create(
+            usuario=self.user,
+            papel=1, 
+            nome='Teste Freelancer',
+            habilidades=[1, 2],
+            estado='SP',
+            cidade='São Paulo',
+            cep='12345-678',
+            telefone='(11) 91234-5678',
+            email_contato='teste@exemplo.com',
+            bio='Sou um freelancer experiente.'
+        )
+        Perfil.objects.create(
+            usuario=User.objects.create_user(username='cliente', password='12345'),
+            papel=2, 
+            nome='Teste Cliente',
+            habilidades=[1]
+        )
+        self.url = reverse('freelancer-list')
+
+    def test_listar_freelancers(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['nome'], 'Teste Freelancer')
+        self.assertEqual(response.data[0]['nome_papel'], 'FREELANCER')
+        self.assertEqual(response.data[0]['nome_habilidades'], ['Desenvolvimento Web', 'Design Gráfico'])
+        self.assertNotIn('Teste Cliente', [perfil['nome'] for perfil in response.data])
