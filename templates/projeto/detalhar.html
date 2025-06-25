@@ -20,6 +20,8 @@
                         <p><strong>Título:</strong> {{ projeto.titulo }}</p>
                         <p><strong>Descrição:</strong> {{ projeto.descricao|default:"Nenhuma descrição fornecida." }}</p>
                         <p><strong>Cliente:</strong> {{ projeto.cliente.nome }}</p>
+                        <p><strong>Email de Contato:</strong> {{ projeto.cliente.email_contato|default:"Não informado" }}</p>
+                        <p><strong>Telefone:</strong> {{ projeto.cliente.telefone|default:"Não informado" }}</p>
                         <p><strong>Status:</strong> <span class="badge bg-{% if projeto.status == 1 %}warning{% elif projeto.status == 2 %}info{% else %}success{% endif %}">{{ projeto.get_status_display }}</span></p>
                         <p><strong>Data de Criação:</strong> {{ projeto.data_criacao|date:"d/m/Y H:i" }}</p>
                     </div>

@@ -23,6 +23,14 @@
         </ion-item>
         <ion-item class="mb-2">
           <ion-label>
+            <h3 class="text-sm font-semibold text-gray-700">Cliente</h3>
+            <p>{{ projeto.cliente_info.nome || 'Não informado' }}</p>
+            <p><strong>Email:</strong> {{ projeto.cliente_info.email_contato }}</p>
+            <p><strong>Telefone:</strong> {{ projeto.cliente_info.telefone }}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item class="mb-2">
+          <ion-label>
             <h3 class="text-sm font-semibold text-gray-700">Endereço</h3>
             <p>{{ projeto.cidade || 'Não informado' }}, {{ projeto.estado || 'Não informado' }}</p>
             <p>{{ projeto.cep || 'Não informado' }} {{ projeto.lote ? 'Lote ' + projeto.lote : '' }}</p>

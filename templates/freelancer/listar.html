@@ -14,9 +14,9 @@
     <div class="col-md-6 col-lg-4 mb-4 freelancer-card animate__animated animate__fadeInUp">
         <div class="card h-100 shadow-sm">
             {% if freelancer.foto %}
-            <img src="{% url 'foto-perfil' arquivo=freelancer.foto.name|cut:'freelancer/fotos/' %}" class="card-img-top" alt="{{ freelancer.nome }}" style="height: 200px; object-fit: cover;">
+            <img src="{% url 'foto-perfil' arquivo=freelancer.foto.name|cut:'freelancer/fotos/' %}" class="card-img-top" alt="{{ freelancer.nome }}" style="height: 250px; object-fit: cover;">
             {% else %}
-            <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
+            <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 250px;">
                 <i class="fas fa-user fa-3x"></i>
             </div>
             {% endif %}

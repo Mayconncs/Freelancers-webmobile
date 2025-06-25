@@ -1,6 +1,19 @@
+export class ClienteInfo {
+  public nome: string;
+  public telefone: string;
+  public email_contato: string;
+
+  constructor() {
+    this.nome = '';
+    this.telefone = '';
+    this.email_contato = '';
+  }
+}
+
 export class Projeto {
   public id: number;
   public cliente: number;
+  public cliente_info: ClienteInfo;
   public titulo: string;
   public descricao: string;
   public habilidades_requeridas: number[];
@@ -16,6 +29,7 @@ export class Projeto {
   constructor() {
     this.id = 0;
     this.cliente = 0;
+    this.cliente_info = new ClienteInfo();
     this.titulo = '';
     this.descricao = '';
     this.habilidades_requeridas = [];
